@@ -3,6 +3,8 @@ package com.cuatico.campus.entities;
 import java.util.List;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -15,6 +17,9 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @Data
 @Entity
+@Table(name="teachers")
 public class Teacher extends User {
-	List<Group> gruposAsignados;
+	
+	@ManyToMany(mappedBy = "teachers")
+	List<Group> assignedGroups;
 }

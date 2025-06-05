@@ -8,7 +8,9 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -22,15 +24,30 @@ import lombok.NoArgsConstructor;
 @Table(name = "groups")
 public class Group {
 	
+	public enum Status {
+	    ACTIVE, INACTIVE, SUSPENDED
+	}
+	
+	public enum Type {
+		SYNC, ASYNC
+	}
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	Long id;
-	LocalDateTime fechaInicio;
-	LocalDateTime fechaFin;	
-	Set<Teacher> docentes;
-	Integer maxAlumnos;
-	Integer inscritosActivos;
-	Integer inscritosNoActivos;
-	Set<Student> matriculados;
-//	Set<Task> tareas; (para cuando se implemente la entidad módulo)
+	@NotBlank
+	Status status;
+	LocalDateTime startDate;
+	LocalDateTime endDate;	
+	String horario;
+	String slackURL;
+	@ManyToMany
+	Set<Teacher> teachers;
+	Integer maxStudents;
+	Integer activeEnrolled;
+	Integer inactiveEnrolled;
+	@ManyToMany
+	Set<Student> enrolled;
+//	Set<Task> tasks; (para cuando se implemente la entidad módulo)
+//	Course course;   (para cuando se implemente)
 }

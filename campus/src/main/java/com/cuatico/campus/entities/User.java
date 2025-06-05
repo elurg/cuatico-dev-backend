@@ -8,6 +8,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Index;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
 import jakarta.persistence.Table;
@@ -25,12 +26,25 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
-@Table(name = "users", uniqueConstraints = { @UniqueConstraint(name = "uk_user_email", columnNames = "email") })
+@Table(name = "users", uniqueConstraints = { @UniqueConstraint(name = "uk_user_email", columnNames = "email") }, indexes = {
+	    @Index(name = "idx_user_email", columnList = "email"),
+	    @Index(name = "idx_user_passwordHash", columnList = "passwordHash"),
+	    @Index(name = "idx_user_status", columnList = "status")})
 public abstract class User {
+	
+	public enum Status {
+	    ACTIVE, INACTIVE, SUSPENDED
+	}
+	
+	public enum Roles {
+	    ADMIN, TEACHER, STUDENT
+	}
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	Long id;
+	@NotBlank
+	Status status;
 	@NotBlank
 	@Size(max = 30)
 	String name;
@@ -48,6 +62,6 @@ public abstract class User {
 	@Size(max = 30)
 	String phone;
 	@ElementCollection
-	Set<String> roles;
+	Set<Roles> roles;
 	
 }
