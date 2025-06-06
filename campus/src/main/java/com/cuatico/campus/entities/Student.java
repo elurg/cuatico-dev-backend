@@ -2,9 +2,9 @@ package com.cuatico.campus.entities;
 
 import java.util.List;
 
+import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -18,6 +18,7 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @Data
 @Entity
+@DiscriminatorValue("STUDENT")
 public class Student extends User {
 	
 	@OneToMany

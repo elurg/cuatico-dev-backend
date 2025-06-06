@@ -1,8 +1,8 @@
 package com.cuatico.campus;
 
-import java.util.ArrayList;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import org.junit.jupiter.api.Test;
@@ -13,14 +13,16 @@ import com.cuatico.campus.entities.Group;
 import com.cuatico.campus.entities.Teacher;
 import com.cuatico.campus.entities.User.Roles;
 import com.cuatico.campus.entities.User.Status;
+import com.cuatico.campus.repositories.GroupRepository;
 import com.cuatico.campus.repositories.UserRepository;
-
-import lombok.AllArgsConstructor;
 
 @SpringBootTest
 class CampusApplicationTests {
 	@Autowired
 	private UserRepository repo;
+	
+	@Autowired
+	private GroupRepository groupRepo;
 
 	@Test
 	void insertarUser() {
@@ -31,9 +33,23 @@ class CampusApplicationTests {
 		Group grupo2 = Group.builder().name("Grupo 2").status(com.cuatico.campus.entities.Group.Status.ACTIVE).build();
 		grupos.add(grupo1);
 		grupos.add(grupo2);
+		
 		teacher.setAssignedGroups(grupos);
-
+		
+		Set<Teacher> teachers = new HashSet<Teacher>();
+		teachers.add(teacher);
+		
 		repo.save(teacher);
+		
+		grupo1.setTeachers(teachers);
+		grupo2.setTeachers(teachers);
+		
+		groupRepo.save(grupo1);
+		groupRepo.save(grupo2);
+		
+
+		Teacher foundTeacher = (Teacher) repo.findByEmail("email@test.com");
+		assertNotNull(foundTeacher, "El profesor debería existir en la base de datos");
 	}
 
 }

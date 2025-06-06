@@ -3,8 +3,11 @@ package com.cuatico.campus.entities;
 import java.util.Set;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.DiscriminatorColumn;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -25,6 +28,8 @@ import lombok.experimental.SuperBuilder;
 @Data
 @SuperBuilder
 @Entity
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "user_type")
 @Table(name = "users", uniqueConstraints = { @UniqueConstraint(name = "uk_user_email", columnNames = "email") }, indexes = {
 	    @Index(name = "idx_user_email", columnList = "email"),
 	    @Index(name = "idx_user_passwordHash", columnList = "passwordHash"),
@@ -42,6 +47,7 @@ public abstract class User {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	Long id;
+	@Enumerated(EnumType.STRING)
 	Status status;
 	@NotBlank
 	@Size(max = 30)
@@ -60,6 +66,7 @@ public abstract class User {
 	@Size(max = 30)
 	String phone;
 	@ElementCollection
+	@Enumerated(EnumType.STRING)
 	Set<Roles> roles;
 	
 }
