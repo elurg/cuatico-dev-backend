@@ -30,9 +30,7 @@ public class Enrollment {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	Long id;
-	@NotBlank
 	Status status;
-	@NotBlank
 	LocalDateTime enrollmentDate;
 	LocalDateTime endDate;
 	@ManyToOne

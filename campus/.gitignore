@@ -29,5 +29,10 @@ build/
 !**/src/main/**/build/
 !**/src/test/**/build/
 
-### VS Code ###
+# Ignorar configuración de VSCode
 .vscode/
+
+# Ignorar archivos y carpetas de Eclipse
+.project
+.classpath
+.settings/

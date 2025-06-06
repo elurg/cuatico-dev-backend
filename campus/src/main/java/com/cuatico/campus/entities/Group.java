@@ -35,8 +35,8 @@ public class Group {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	Long id;
-	@NotBlank
 	Status status;
+	String name;
 	LocalDateTime startDate;
 	LocalDateTime endDate;	
 	String horario;

@@ -25,7 +25,6 @@ import lombok.experimental.SuperBuilder;
 @Data
 @SuperBuilder
 @Entity
-@Inheritance(strategy = InheritanceType.JOINED)
 @Table(name = "users", uniqueConstraints = { @UniqueConstraint(name = "uk_user_email", columnNames = "email") }, indexes = {
 	    @Index(name = "idx_user_email", columnList = "email"),
 	    @Index(name = "idx_user_passwordHash", columnList = "passwordHash"),
@@ -43,7 +42,6 @@ public abstract class User {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	Long id;
-	@NotBlank
 	Status status;
 	@NotBlank
 	@Size(max = 30)

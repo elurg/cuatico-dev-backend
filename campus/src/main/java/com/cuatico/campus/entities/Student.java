@@ -18,7 +18,6 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @Data
 @Entity
-@Table(name="students")
 public class Student extends User {
 	
 	@OneToMany
