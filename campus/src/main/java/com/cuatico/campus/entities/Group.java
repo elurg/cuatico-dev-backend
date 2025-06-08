@@ -11,6 +11,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.NamedAttributeNode;
+import jakarta.persistence.NamedEntityGraph;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -25,6 +27,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Data
 @Table(name = "groups")
+@NamedEntityGraph(name = "Group.withTeachers", attributeNodes = @NamedAttributeNode("assignedTeachers"))
 public class Group {
 	
 	public enum Status {
@@ -37,6 +40,7 @@ public class Group {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@EqualsAndHashCode.Include
 	Long id;
 	@Enumerated(EnumType.STRING)
 	Status status;
@@ -45,13 +49,13 @@ public class Group {
 	LocalDateTime endDate;	
 	String horario;
 	String slackURL;
-	@ManyToMany
-	Set<Teacher> teachers;
+	@ManyToMany(mappedBy = "assignedGroups")
+	Set<Teacher> assignedTeachers;
 	Integer maxStudents;
 	Integer activeEnrolled;
 	Integer inactiveEnrolled;
 	@ManyToMany
-	Set<Student> enrolled;
+	Set<Student> assignedStudents;
 //	Set<Task> tasks; (para cuando se implemente la entidad módulo)
 //	Course course;   (para cuando se implemente)
 }

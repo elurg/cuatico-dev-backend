@@ -5,6 +5,8 @@ import java.util.Set;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.NamedAttributeNode;
+import jakarta.persistence.NamedEntityGraph;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -18,8 +20,9 @@ import lombok.experimental.SuperBuilder;
 @Data
 @Entity
 @DiscriminatorValue("TEACHER")
+@NamedEntityGraph(name = "Teacher.withGroups", attributeNodes = @NamedAttributeNode("assignedGroups"))
 public class Teacher extends User {
 	
-	@ManyToMany(mappedBy = "teachers")
+	@ManyToMany(mappedBy = "assignedTeachers")
 	Set<Group> assignedGroups;
 }

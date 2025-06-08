@@ -17,9 +17,11 @@ import jakarta.persistence.InheritanceType;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.PositiveOrZero;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
@@ -44,27 +46,56 @@ public abstract class User {
 	    ADMIN, TEACHER, STUDENT
 	}
 	
+	
+//	----------ID-------------
 	@Id
+	@PositiveOrZero
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@EqualsAndHashCode.Include
 	Long id;
+	
+
+//	----------STATUS-------------
 	@Enumerated(EnumType.STRING)
 	Status status;
+	
+	
+
+//	----------NAME-------------
 	@NotBlank
 	@Size(max = 30)
 	String name;
+	
+	
+	
+//	----------SURNAME-------------
 	@NotBlank
 	@Size(max = 50)
 	String surnames;
+	
+	
+//	----------USERNAME-------------
 	@Size(max = 20)
 	String username;
+	
+	
+//	----------EMAIL-------------
 	@Column(unique = true, nullable = false)
 	@Size(max = 50)
 	String email;
+	
+	
+//	----------PASSWORDHASH-------------
 	@NotBlank
 	@Size(max = 200)
 	String passwordHash;
+	
+	
+//	----------PHONE-------------        (es un string por si alguien pone algo así: "+34 600-00-00-00")
 	@Size(max = 30)
 	String phone;
+	
+//	----------ROLES-------------
 	@ElementCollection
 	@Enumerated(EnumType.STRING)
 	Set<Roles> roles;
