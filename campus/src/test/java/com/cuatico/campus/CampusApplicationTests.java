@@ -42,7 +42,7 @@ class CampusApplicationTests {
 		
 		
 //		ASIGNAR LOS GRUPOS AL PROFESOR
-		teacher.setAssignedGroups(grupos);
+		teacher.setTeacherGroups(grupos);
 		
 		
 //		INSERTAR EL TEACHER
@@ -56,8 +56,8 @@ class CampusApplicationTests {
 
 		
 //		ASIGNAR EL TEACHER A LOS GRUPOS Y GUARDAMOS LOS GRUPOS
-		grupo1.setAssignedTeachers(teachers);
-		grupo2.setAssignedTeachers(teachers);
+		grupo1.setGroupTeachers(teachers);
+		grupo2.setGroupTeachers(teachers);
 		
 		groupRepo.save(grupo1);
 		groupRepo.save(grupo2);
@@ -68,8 +68,8 @@ class CampusApplicationTests {
 		Teacher foundTeacher = (Teacher) teacherRepo.findByEmail("email@test.com");
 		assertNotNull(foundTeacher, "El profesor debería existir en la base de datos");
 		
-		assertNotNull(foundTeacher.getAssignedGroups(), "El profesor debería tener grupos asignados");
-	    assertEquals(2, foundTeacher.getAssignedGroups().size(), "El profesor debería tener 2 grupos asignados");
+		assertNotNull(foundTeacher.getTeacherGroups(), "El profesor debería tener grupos asignados");
+	    assertEquals(2, foundTeacher.getTeacherGroups().size(), "El profesor debería tener 2 grupos asignados");
 		
 		Group foundGroup1 = groupRepo.findByName("Grupo 1");
 		assertNotNull(foundGroup1, "El grupo 1 debería existir en la base de datos");
@@ -77,10 +77,10 @@ class CampusApplicationTests {
 		assertNotNull(foundGroup2, "El grupo 2 debería existir en la base de datos");
 		
 //		COMPROBAR QUE LOS GRUPOS TIENEN TEACHER
-		Set<Teacher> foundTeachersGroup1 = groupRepo.findByName("Grupo 1").getAssignedTeachers();
+		Set<Teacher> foundTeachersGroup1 = groupRepo.findByName("Grupo 1").getGroupTeachers();
 		assertNotNull(foundTeachersGroup1, "El grupo 1 debería existir en la base de datos con un set de teachers");
 		
-		Set<Teacher> foundTeachersGroup2 = groupRepo.findByName("Grupo 2").getAssignedTeachers();
+		Set<Teacher> foundTeachersGroup2 = groupRepo.findByName("Grupo 2").getGroupTeachers();
 		assertNotNull(foundTeachersGroup2, "El grupo 2 debería existir en la base de datos con un set de teachers");
 	}	
 }

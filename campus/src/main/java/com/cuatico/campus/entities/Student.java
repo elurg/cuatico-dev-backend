@@ -1,9 +1,11 @@
 package com.cuatico.campus.entities;
 
-import java.util.List;
+import java.util.Set;
 
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
+import jakarta.persistence.NamedAttributeNode;
+import jakarta.persistence.NamedEntityGraph;
 import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -19,8 +21,11 @@ import lombok.experimental.SuperBuilder;
 @Data
 @Entity
 @DiscriminatorValue("STUDENT")
+@NamedEntityGraph(name = "Student.withEnrollments", attributeNodes = @NamedAttributeNode("studentEnrollments"))
 public class Student extends User {
 	
-	@OneToMany
-	List<Enrollment> enrollments;
+	
+//	----------MATRÍCULAS DEL ALUMNO-------------
+	@OneToMany(mappedBy = "student")
+	Set<Enrollment> studentEnrollments;
 }

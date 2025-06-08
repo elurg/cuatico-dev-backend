@@ -20,9 +20,12 @@ import lombok.experimental.SuperBuilder;
 @Data
 @Entity
 @DiscriminatorValue("TEACHER")
-@NamedEntityGraph(name = "Teacher.withGroups", attributeNodes = @NamedAttributeNode("assignedGroups"))
+@NamedEntityGraph(name = "Teacher.withGroups", attributeNodes = @NamedAttributeNode("teacherGroups"))
 public class Teacher extends User {
 	
-	@ManyToMany(mappedBy = "assignedTeachers")
-	Set<Group> assignedGroups;
+	
+//	----------GRUPOS ASIGNADOS-------------
+	
+	@ManyToMany(mappedBy = "groupTeachers")
+	Set<Group> teacherGroups;
 }
