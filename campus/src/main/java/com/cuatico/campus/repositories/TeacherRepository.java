@@ -16,6 +16,6 @@ public interface TeacherRepository extends UserBaseRepository<Teacher> {
 	Optional<Teacher> findById(Long id);
 	
 
-	@EntityGraph(value = "Teacher.withGroups")
-	Teacher findByGroupId(Long id);
+//	@EntityGraph(value = "Teacher.withGroups")
+//	Teacher findByGroup(Set<Group> groups);
 }

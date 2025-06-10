@@ -33,15 +33,17 @@ class CampusApplicationTests {
 		Teacher teacher = Teacher.builder().email("email@test.com").status(Status.ACTIVE).name("Diana").surnames("Henao").phone("666666666").passwordHash("ÑKJSDHFS6574DF65324.Aa").roles(Set.of(Roles.TEACHER)).build();
 
 		
-//		CREAR GRUPOS (ATRIBUTO IMPORTANTE PARA TEACHER)
-		Set<Group> grupos = new HashSet<>();
+//		CREAR GRUPOS (SI NO HAY GRUPO NO SE LE PUEDE ASIGNAR UN TEACHER)
 		Group grupo1 = Group.builder().name("Grupo 1").status(com.cuatico.campus.entities.Group.Status.ACTIVE).build();
 		Group grupo2 = Group.builder().name("Grupo 2").status(com.cuatico.campus.entities.Group.Status.ACTIVE).build();
-		grupos.add(grupo1);
-		grupos.add(grupo2);
 		
+		groupRepo.save(grupo1);
+		groupRepo.save(grupo2);
 		
 //		ASIGNAR LOS GRUPOS AL PROFESOR
+		Set<Group> grupos = new HashSet<>();
+		grupos.add(grupo1);
+		grupos.add(grupo2);
 		teacher.setTeacherGroups(grupos);
 		
 		
@@ -55,14 +57,14 @@ class CampusApplicationTests {
 		teachers.add(teacher);
 
 		
-//		ASIGNAR EL TEACHER A LOS GRUPOS Y GUARDAMOS LOS GRUPOS
+//		ASIGNAR EL TEACHER A LOS GRUPOS
 		grupo1.setGroupTeachers(teachers);
 		grupo2.setGroupTeachers(teachers);
 		
+//		ACTUALIZAR LOS GRUPOS CON LA INFO DEL TEACHER
+		
 		groupRepo.save(grupo1);
 		groupRepo.save(grupo2);
-		
-		
 		
 //		COMPROBAR QUE EXISTE EL TEACHER (con dos grupos) Y LOS GRUPOS
 		Teacher foundTeacher = (Teacher) teacherRepo.findByEmail("email@test.com");

@@ -3,23 +3,8 @@ package com.cuatico.campus.entities;
 
 import java.time.LocalDateTime;
 import java.util.Set;
-
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.NamedAttributeNode;
-import jakarta.persistence.NamedEntityGraph;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import jakarta.persistence.*;
+import lombok.*;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -68,7 +53,12 @@ public class Group {
 	
 	
 //	----------ID-------------
-	@ManyToMany(mappedBy = "teacherGroups")
+	@ManyToMany
+	@JoinTable(
+		    name = "teacher_group",
+		    joinColumns = @JoinColumn(name = "group_id"),
+		    inverseJoinColumns = @JoinColumn(name = "teacher_id")
+		)
 	Set<Teacher> groupTeachers;
 	
 	
