@@ -15,6 +15,7 @@ import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.PositiveOrZero;
 import jakarta.validation.constraints.Size;
@@ -81,6 +82,7 @@ public abstract class User {
 //	----------EMAIL-------------
 	@Column(unique = true, nullable = false)
 	@Size(max = 50)
+	@Email
 	String email;
 	
 	
