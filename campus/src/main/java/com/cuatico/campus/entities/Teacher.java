@@ -1,9 +1,15 @@
 package com.cuatico.campus.entities;
 
+import java.util.HashSet;
 import java.util.Set;
 
-import jakarta.persistence.*;
+import jakarta.persistence.DiscriminatorValue;
+import jakarta.persistence.Entity;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.NamedAttributeNode;
+import jakarta.persistence.NamedEntityGraph;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -23,5 +29,6 @@ public class Teacher extends User {
 //	----------GRUPOS ASIGNADOS-------------
 	
 	@ManyToMany(mappedBy = "groupTeachers")
-	Set<Group> teacherGroups;
+	@Builder.Default
+	Set<Group> teacherGroups = new HashSet<>();
 }

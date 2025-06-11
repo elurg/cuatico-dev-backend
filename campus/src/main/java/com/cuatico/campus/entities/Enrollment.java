@@ -42,12 +42,17 @@ public class Enrollment {
 	
 	
 //	----------STATUS-------------
+	@NotNull
 	@Enumerated(EnumType.STRING)
-	Status status;
+	@Builder.Default
+	Status status = Status.ACTIVE;
 	
 	
 //	----------FECHAS-------------
-	LocalDateTime enrollmentDate;
+	@NotNull
+	@Builder.Default
+	LocalDateTime enrollmentDate = LocalDateTime.now();
+	
 	LocalDateTime endDate;
 	
 	

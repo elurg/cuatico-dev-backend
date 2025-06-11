@@ -1,5 +1,6 @@
 package com.cuatico.campus.entities;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import jakarta.persistence.Column;
@@ -15,11 +16,12 @@ import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
-import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.PositiveOrZero;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -82,7 +84,7 @@ public abstract class User {
 //	----------EMAIL-------------
 	@Column(unique = true, nullable = false)
 	@Size(max = 50)
-	@Email
+	@Pattern(regexp = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$", message = "Formato de correo electrónico inválido")
 	String email;
 	
 	
@@ -95,11 +97,16 @@ public abstract class User {
 //	----------PHONE-------------        (es un string por si alguien pone algo así: "+34 600-00-00-00")
 	@Size(max = 30)
 	String phone;
+
 	
-//	----------ROLES------------- Plantear si quitar role porque puede ser que con el discriminatorycolumn sea suficiente
-//								 La
+	
+//	----------ROLES------------- Plantear si quitar roles porque puede ser que con el discriminatorycolumn sea suficiente
+//								 La idea es que cada tipo de usuario solo pueda ser instanciado una vez con un email único
+//								 Si un alumno de repente pasa a ser teacher, deberá crear una cuenta de mail nueva
+//								 que además puede ayudar a corporativizar la empresa (newTeacher.cuatico@gmail.com)
 
 	@Enumerated(EnumType.STRING)
-	Set<Roles> roles;
+	@Builder.Default
+	Set<Roles> roles = new HashSet<>();
 	
 }
