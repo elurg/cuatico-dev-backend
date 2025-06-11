@@ -39,6 +39,7 @@ public class Group {
 	
 	
 //	----------NOMBRE-------------
+	@EqualsAndHashCode.Include
 	String name;
 	
 	
@@ -55,7 +56,7 @@ public class Group {
 //	----------ID-------------
 	@ManyToMany
 	@JoinTable(
-		    name = "teacher_group",
+		    name = "group_teachers",
 		    joinColumns = @JoinColumn(name = "group_id"),
 		    inverseJoinColumns = @JoinColumn(name = "teacher_id")
 		)
@@ -72,7 +73,12 @@ public class Group {
 	
 	
 //	----------LISTA DE MATRICULADOS-------------
-	@OneToMany(mappedBy = "group")
+	@OneToMany
+	@JoinTable(
+		    name = "group_enrollments",
+		    joinColumns = @JoinColumn(name = "group_id"),
+		    inverseJoinColumns = @JoinColumn(name = "enrollment_id")
+		)
 	Set<Enrollment> groupEnrollments;
 	
 	

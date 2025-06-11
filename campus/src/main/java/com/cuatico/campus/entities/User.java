@@ -4,7 +4,6 @@ import java.util.Set;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorColumn;
-import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -95,8 +94,9 @@ public abstract class User {
 	@Size(max = 30)
 	String phone;
 	
-//	----------ROLES-------------
-	@ElementCollection
+//	----------ROLES------------- Plantear si quitar role porque puede ser que con el discriminatorycolumn sea suficiente
+//								 La
+
 	@Enumerated(EnumType.STRING)
 	Set<Roles> roles;
 	
