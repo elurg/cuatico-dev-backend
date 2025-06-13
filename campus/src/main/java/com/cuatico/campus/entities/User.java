@@ -1,7 +1,6 @@
 package com.cuatico.campus.entities;
 
-import java.util.HashSet;
-import java.util.Set;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorColumn;
@@ -21,7 +20,6 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.PositiveOrZero;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -29,6 +27,7 @@ import lombok.experimental.SuperBuilder;
 
 @AllArgsConstructor
 @NoArgsConstructor
+@JsonIgnoreProperties(value = {"password"}, allowSetters = true)
 @Data
 @SuperBuilder
 @Entity
@@ -39,6 +38,8 @@ import lombok.experimental.SuperBuilder;
 	    @Index(name = "idx_user_passwordHash", columnList = "passwordHash"),
 	    @Index(name = "idx_user_status", columnList = "status")})
 public abstract class User {
+	
+	public static final String EMAIL_REGEX = "(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|\"(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])";
 	
 	public enum Status {
 	    ACTIVE, INACTIVE, SUSPENDED
@@ -54,59 +55,53 @@ public abstract class User {
 	@PositiveOrZero
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@EqualsAndHashCode.Include
-	Long id;
+	private Long id;
 	
 
 //	----------STATUS-------------
 	@Enumerated(EnumType.STRING)
-	Status status;
+	private Status status;
 	
 	
 
 //	----------NAME-------------
 	@NotBlank
 	@Size(max = 30)
-	String name;
+	private String name;
 	
 	
 	
 //	----------SURNAME-------------
 	@NotBlank
 	@Size(max = 50)
-	String surnames;
+	private String surnames;
 	
 	
 //	----------USERNAME-------------
 	@Size(max = 20)
-	String username;
+	private String username;
 	
 	
 //	----------EMAIL-------------
 	@Column(unique = true, nullable = false)
 	@Size(max = 50)
-	@Pattern(regexp = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$", message = "Formato de correo electrónico inválido")
-	String email;
+	@Pattern(regexp = EMAIL_REGEX, message = "Formato de correo electrónico inválido")
+	private String email;
 	
 	
 //	----------PASSWORDHASH-------------
 	@NotBlank
 	@Size(max = 200)
-	String passwordHash;
+	private String passwordHash;
 	
 	
 //	----------PHONE-------------        (es un string por si alguien pone algo así: "+34 600-00-00-00")
 	@Size(max = 30)
-	String phone;
+	private String phone;
 
 	
-	
-//	----------ROLES------------- Plantear si quitar roles porque puede ser que con el discriminatorycolumn sea suficiente
-//								 La idea es que cada tipo de usuario solo pueda ser instanciado una vez con un email único
-//								 Si un alumno de repente pasa a ser teacher, deberá crear una cuenta de mail nueva
-//								 que además puede ayudar a corporativizar la empresa (newTeacher.cuatico@gmail.com)
-
-	@Enumerated(EnumType.STRING)
-	@Builder.Default
-	Set<Roles> roles = new HashSet<>();
+	public String getRole() {
+        return this.getClass().getSimpleName();
+    }
 	
 }

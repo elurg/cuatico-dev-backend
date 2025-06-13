@@ -1,6 +1,7 @@
 package com.cuatico.campus.services.impl;
 
-import java.util.Set;
+import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
@@ -27,8 +28,14 @@ public class StudentServiceImpl implements StudentService {
 	@Override
 	@Transactional
 	public Student registerStudent(Student student) {
-		studentRepo.save(student);
-		return student;
+		Student checkedStudent = studentRepo.findByEmail(student.getEmail());
+
+		if (checkedStudent != null) {
+			throw new ServiceException("El estudiante con email " + student.getEmail() + " ya está registrado.");
+		}
+
+		studentRepo.save(checkedStudent);
+		return checkedStudent;
 	}
 	
 	
@@ -57,17 +64,35 @@ public class StudentServiceImpl implements StudentService {
 		
 		enrollmentRepo.save(enrollment);
 
-		Set<Enrollment> groupEnrollments = checkedGroup.getGroupEnrollments();
+		List<Enrollment> groupEnrollments = checkedGroup.getGroupEnrollments();
 		groupEnrollments.add(enrollment);
 		checkedGroup.setGroupEnrollments(groupEnrollments);
 		groupRepo.save(checkedGroup);
 
-		Set<Enrollment> studentEnrollments = checkedStudent.getStudentEnrollments();
+		List<Enrollment> studentEnrollments = checkedStudent.getStudentEnrollments();
 		studentEnrollments.add(enrollment);
 		checkedStudent.setStudentEnrollments(studentEnrollments);
 		studentRepo.save(checkedStudent);
 
 		return enrollment;
 	}
+	
+	@Override
+    @Transactional
+    public List<Student> findAll() {
+        List<Student> students = studentRepo.findAll();
+        if (students.isEmpty()){
+            throw new ServiceException("No hay estudiantes en la base de datos");
+        }
+        return students;
+    }
+
+
+    @Override
+    @Transactional
+    public Student findById(Long id) {
+        Optional<Student> student =studentRepo.findById(id);
+        return student.orElseThrow(() -> new ServiceException("El estudiante no existe"));
+    }
 
 }

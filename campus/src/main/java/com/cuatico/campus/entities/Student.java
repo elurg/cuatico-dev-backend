@@ -1,7 +1,9 @@
 package com.cuatico.campus.entities;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
@@ -29,14 +31,19 @@ public class Student extends User {
 
 	@OneToMany(mappedBy = "student")
 	@Builder.Default
-	Set<Enrollment> studentEnrollments = new HashSet<>();
+	@JsonIgnore
+	private List<Enrollment> studentEnrollments = new ArrayList<>();
+
+//	-----------------------------------------------------------------------------------
+//	------------------------MÉTODOS DE LA CLASE----------------------------------------
+//	-----------------------------------------------------------------------------------
 
 //	----------AÑADIR MATRÍCULA-------------
 
 	public void addEnrollment(Enrollment enrollment) {
-		if (enrollment != null) {
-			this.studentEnrollments.add(enrollment);
+		if (enrollment != null && this.studentEnrollments.add(enrollment)) {
 			enrollment.setStudent(this);
+			enrollment.getGroup().addEnrollment(enrollment);
 		}
 	}
 
@@ -44,9 +51,9 @@ public class Student extends User {
 //											  DE LA MATRICULA. MEJOR UTILIZAR updateEnrollmentStatus
 
 	public void removeEnrollment(Enrollment enrollment) {
-		if (enrollment != null) {
-			this.studentEnrollments.remove(enrollment);
+		if (enrollment != null && this.studentEnrollments.remove(enrollment)) {
 			enrollment.setStudent(null);
+			enrollment.getGroup().removeEnrollment(enrollment);
 		}
 	}
 

@@ -1,7 +1,9 @@
 package com.cuatico.campus.entities;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
@@ -24,11 +26,32 @@ import lombok.experimental.SuperBuilder;
 @DiscriminatorValue("TEACHER")
 @NamedEntityGraph(name = "Teacher.withGroups", attributeNodes = @NamedAttributeNode("teacherGroups"))
 public class Teacher extends User {
-	
-	
+
 //	----------GRUPOS ASIGNADOS-------------
-	
+
 	@ManyToMany(mappedBy = "groupTeachers")
 	@Builder.Default
-	Set<Group> teacherGroups = new HashSet<>();
+	@JsonIgnore
+	private List<Group> teacherGroups = new ArrayList<>();
+
+//	-----------------------------------------------------------------------------------
+//	------------------------MÉTODOS DE LA CLASE----------------------------------------
+//	-----------------------------------------------------------------------------------
+
+//	----------AÑADIR GRUPO AL TEACHER-------------
+
+	public void addGroup(Group group) {
+		if (group != null && this.teacherGroups.add(group) && !group.getGroupTeachers().contains(this)) {
+			group.addTeacher(this);
+		}
+	}
+
+//	----------ELIMINAR GRUPO AL TEACHER------------- 
+
+	public void removeGroup(Group group) {
+		if (group != null && this.teacherGroups.remove(group) && group.getGroupTeachers().contains(this)) {
+			group.removeTeacher(this);
+		}
+	}
+
 }

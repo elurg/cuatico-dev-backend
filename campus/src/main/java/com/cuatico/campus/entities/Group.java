@@ -1,8 +1,10 @@
 package com.cuatico.campus.entities;
 
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -46,53 +48,62 @@ public class Group {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@EqualsAndHashCode.Include
-	Long id;
+	private Long id;
 
 //	----------STATUS-------------
 	@Enumerated(EnumType.STRING)
-	Status status;
+	private Status status;
 
 //	----------NOMBRE-------------
 	@EqualsAndHashCode.Include
-	String name;
+	private String name;
 
 //	----------FECHAS Y HORARIO-------------
 	LocalDateTime startDate;
 	LocalDateTime endDate;
-	String horario;
+	private String horario;
 
 //	----------SALAS DE DIRECTO-------------
-	String slackURL;
+	private String slackURL;
 
 //	----------ID-------------
 	@ManyToMany
 	@JoinTable(name = "group_teachers", joinColumns = @JoinColumn(name = "group_id"), inverseJoinColumns = @JoinColumn(name = "teacher_id"))
 	@Builder.Default
-	Set<Teacher> groupTeachers = new HashSet<>();
+	@JsonIgnore
+	private List<Teacher> groupTeachers = new ArrayList<>();
 
 //	----------ESTUDIANTES MÁXIMOS-------------
-	Integer maxStudents;
+	private Integer maxStudents;
 
 //	----------ESTUDIANTES ACT/INCT-------------
-	Integer activeEnrolled;
-	Integer inactiveEnrolled;
+	private Integer activeEnrolled;
+	private Integer inactiveEnrolled;
 
 //	----------LISTA DE MATRICULADOS-------------
 	@OneToMany
 	@JoinTable(name = "group_enrollments", joinColumns = @JoinColumn(name = "group_id"), inverseJoinColumns = @JoinColumn(name = "enrollment_id"))
 	@Builder.Default
-	Set<Enrollment> groupEnrollments = new HashSet<>();
+	@JsonIgnore
+	private List<Enrollment> groupEnrollments = new ArrayList<>();
 
 //	Set<Task> tasks; (para cuando se implemente la entidad módulo)
 //	Course course;   (para cuando se implemente)
 
-	
+//	-----------------------------------------------------------------------------------
+//	------------------------MÉTODOS DE LA CLASE----------------------------------------
+//	-----------------------------------------------------------------------------------
+
 //	----------AÑADIR MATRÍCULA AL GRUPO-------------
 
 	public void addEnrollment(Enrollment enrollment) {
-		if (enrollment != null) {
-			this.groupEnrollments.add(enrollment);
-			enrollment.setGroup(this);
+		if (enrollment == null)
+			return;
+		this.groupEnrollments.add(enrollment);
+		enrollment.setGroup(this);
+		Student student = enrollment.getStudent();
+		if (student != null) {
+			student.getStudentEnrollments().add(enrollment);
 		}
 	}
 
@@ -100,10 +111,14 @@ public class Group {
 //	  										            DE LA MATRICULA. MEJOR UTILIZAR updateEnrollmentStatus
 
 	public void removeEnrollment(Enrollment enrollment) {
-		if (enrollment != null) {
-			this.groupEnrollments.remove(enrollment);
-			enrollment.setStudent(null);
+		if (enrollment == null)
+			return;
+		this.groupEnrollments.remove(enrollment);
+		Student student = enrollment.getStudent();
+		if (student != null) {
+			student.getStudentEnrollments().remove(enrollment);
 		}
+		enrollment.setGroup(null);
 	}
 
 //----------CAMBIAR EL STATUS DE LA  MATRÍCULA-------- DEJA LA MATRÍCULA INHABILITADA PERO CONSERVA SU TRAZA EN DB
@@ -114,6 +129,28 @@ public class Group {
 				enrollment.setStatus(newStatus);
 				return true;
 			}
-		} return false;
+		}
+		return false;
 	}
+
+//	----------AÑADIR TEACHER AL GRUPO-------------
+
+	public void addTeacher(Teacher teacher) {
+		if (teacher != null && this.groupTeachers.add(teacher)) {
+			if (!teacher.getTeacherGroups().contains(this)) {
+				teacher.addGroup(this);
+			}
+		}
+	}
+
+//	----------ELIMINAR TEACHER DEL GRUPO------------- 
+
+	public void removeTeacher(Teacher teacher) {
+		if (teacher != null && this.groupTeachers.remove(teacher)) {
+			if (teacher.getTeacherGroups().contains(this)) {
+				teacher.removeGroup(this);
+			}
+		}
+	}
+
 }

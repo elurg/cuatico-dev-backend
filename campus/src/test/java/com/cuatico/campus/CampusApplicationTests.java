@@ -3,15 +3,22 @@ package com.cuatico.campus;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import com.cuatico.campus.entities.*;
-import com.cuatico.campus.entities.User.Roles;
+
+import com.cuatico.campus.entities.Enrollment;
+import com.cuatico.campus.entities.Group;
+import com.cuatico.campus.entities.Student;
+import com.cuatico.campus.entities.Teacher;
 import com.cuatico.campus.entities.User.Status;
-import com.cuatico.campus.repositories.*;
+import com.cuatico.campus.repositories.EnrollmentRepository;
+import com.cuatico.campus.repositories.GroupRepository;
+import com.cuatico.campus.repositories.StudentRepository;
+import com.cuatico.campus.repositories.TeacherRepository;
 
 @SpringBootTest
 class CampusApplicationTests {
@@ -31,7 +38,7 @@ class CampusApplicationTests {
 	void insertarTeacherYGrupos() {
 		
 //		CREAR TEACHER
-		Teacher teacher = Teacher.builder().email("email@test.com").status(Status.ACTIVE).name("Diana").surnames("Henao").phone("666666666").passwordHash("ÑKJSDHFS6574DF65324.Aa").roles(Set.of(Roles.TEACHER)).build();
+		Teacher teacher = Teacher.builder().email("email@test.com").status(Status.ACTIVE).name("Diana").surnames("Henao").phone("666666666").passwordHash("ÑKJSDHFS6574DF65324.Aa").build();
 
 		
 //		CREAR GRUPOS (SI NO HAY GRUPO NO SE LE PUEDE ASIGNAR UN TEACHER)
@@ -42,7 +49,7 @@ class CampusApplicationTests {
 		groupRepo.save(grupo2);
 		
 //		ASIGNAR LOS GRUPOS AL PROFESOR
-		Set<Group> grupos = new HashSet<>();
+		List<Group> grupos = new ArrayList<>();
 		grupos.add(grupo1);
 		grupos.add(grupo2);
 		teacher.setTeacherGroups(grupos);
@@ -54,7 +61,7 @@ class CampusApplicationTests {
 		
 		
 //		GENERAR UN SET DE TEACHERS (como los cursos pueden tener más de un profe, hay que pasarlos en una colección aunque solo sea uno)
-		Set<Teacher> teachers = new HashSet<Teacher>();
+		List<Teacher> teachers = new ArrayList<>();
 		teachers.add(teacher);
 
 		
@@ -80,10 +87,10 @@ class CampusApplicationTests {
 		assertNotNull(foundGroup2, "El grupo 2 debería existir en la base de datos");
 		
 //		COMPROBAR QUE LOS GRUPOS TIENEN TEACHER
-		Set<Teacher> foundTeachersGroup1 = groupRepo.findByName("Grupo 1").getGroupTeachers();
+		List<Teacher> foundTeachersGroup1 = groupRepo.findByName("Grupo 1").getGroupTeachers();
 		assertNotNull(foundTeachersGroup1, "El grupo 1 debería existir en la base de datos con un set de teachers");
 		
-		Set<Teacher> foundTeachersGroup2 = groupRepo.findByName("Grupo 2").getGroupTeachers();
+		List<Teacher> foundTeachersGroup2 = groupRepo.findByName("Grupo 2").getGroupTeachers();
 		assertNotNull(foundTeachersGroup2, "El grupo 2 debería existir en la base de datos con un set de teachers");
 	}	
 	
@@ -108,7 +115,7 @@ class CampusApplicationTests {
 		enrollmentRepo.save(enroll1);
 		
 //		METEMOS LA MATRÍCULA EN UN SET
-		Set<Enrollment> enrollments = new HashSet<Enrollment>();
+		List<Enrollment> enrollments = new ArrayList<>();
 		enrollments.add(enroll1);
 		
 		

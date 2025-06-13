@@ -38,39 +38,39 @@ public class Enrollment {
 //	----------ID-------------
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	Long id;
+	private Long id;
 	
 	
 //	----------STATUS-------------
 	@NotNull
 	@Enumerated(EnumType.STRING)
 	@Builder.Default
-	Status status = Status.ACTIVE;
+	private Status status = Status.ACTIVE;
 	
 	
 //	----------FECHAS-------------
 	@NotNull
 	@Builder.Default
-	LocalDateTime enrollmentDate = LocalDateTime.now();
+	private LocalDateTime enrollmentDate = LocalDateTime.now();
 	
-	LocalDateTime endDate;
+	private LocalDateTime endDate;
 	
 	
 //	----------ESTUDIANTE-------------
 	@NotNull
 	@ManyToOne
-	Student student;
+	private Student student;
 	
 	
 //	----------GRUPO-------------	
 	@NotNull
 	@ManyToOne
-	Group group;
+	private Group group;
 	
 	
 //	----------NOTA-------------
-	Integer finalGrade;
-	Boolean hasPassed;
+	private Integer finalGrade;
+	private Boolean hasPassed;
 	
 	
 //	Course course; (para cuando esté implementado)
