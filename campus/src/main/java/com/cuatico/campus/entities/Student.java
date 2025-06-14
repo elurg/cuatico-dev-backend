@@ -36,26 +36,8 @@ public class Student extends User {
 
 //	-----------------------------------------------------------------------------------
 //	------------------------MÉTODOS DE LA CLASE----------------------------------------
-//	-----------------------------------------------------------------------------------
+//	-----------------------(migrando a servicio)---------------------------------------
 
-//	----------AÑADIR MATRÍCULA-------------
-
-	public void addEnrollment(Enrollment enrollment) {
-		if (enrollment != null && this.studentEnrollments.add(enrollment)) {
-			enrollment.setStudent(this);
-			enrollment.getGroup().addEnrollment(enrollment);
-		}
-	}
-
-//	----------ELIMINAR MATRÍCULA------------- IMPORTANTE! INTENTAR NO UTILIZAR PORQUE ELIMINA LA TRAZA
-//											  DE LA MATRICULA. MEJOR UTILIZAR updateEnrollmentStatus
-
-	public void removeEnrollment(Enrollment enrollment) {
-		if (enrollment != null && this.studentEnrollments.remove(enrollment)) {
-			enrollment.setStudent(null);
-			enrollment.getGroup().removeEnrollment(enrollment);
-		}
-	}
 
 //	----------CAMBIAR EL STATUS DE LA  MATRÍCULA-------- DEJA LA MATRÍCULA INHABILITADA PERO CONSERVA SU TRAZA EN DB
 
