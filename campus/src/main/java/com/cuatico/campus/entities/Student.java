@@ -34,21 +34,4 @@ public class Student extends User {
 	@JsonIgnore
 	private List<Enrollment> studentEnrollments = new ArrayList<>();
 
-//	-----------------------------------------------------------------------------------
-//	------------------------MÉTODOS DE LA CLASE----------------------------------------
-//	-----------------------(migrando a servicio)---------------------------------------
-
-
-//	----------CAMBIAR EL STATUS DE LA  MATRÍCULA-------- DEJA LA MATRÍCULA INHABILITADA PERO CONSERVA SU TRAZA EN DB
-
-	public boolean updateEnrollmentStatus(Long enrollmentId, Enrollment.Status newStatus) {
-		for (Enrollment enrollment : this.studentEnrollments) {
-			if (enrollment.getId().equals(enrollmentId)) {
-				enrollment.setStatus(newStatus);
-				return true;
-			}
-		}
-		return false;
-	}
-
 }
