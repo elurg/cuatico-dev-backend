@@ -110,6 +110,32 @@ public class StudentServiceImpl implements StudentService {
 	}
 	
 	
+	public boolean updateEnrollmentStatus(Enrollment enrollment, Enrollment.Status newStatus) {
+		Enrollment checkedEnrollment = enrollmentRepo.findById(enrollment.getId()).orElseThrow(() -> new ServiceException("La matrícula no existe"));
+
+		Student checkedStudent = checkedEnrollment.getStudent();
+		if (checkedStudent == null) {
+			throw new ServiceException("El estudiante no existe");
+		}
+		if (!checkedStudent.getStudentEnrollments().contains(checkedEnrollment)) {
+			throw new ServiceException("El estudiante no tiene una matrícula con id " + enrollment.getId() + ".");
+		}
+		Group checkedGroup = enrollment.getGroup();
+		if (checkedGroup == null) {
+			throw new ServiceException("El grupo no existe");
+		}
+		
+		if (!checkedGroup.getGroupEnrollments().contains(checkedEnrollment)) {
+			throw new ServiceException("El grupo no tiene una matrícula con id " + enrollment.getId() + ".");
+		}
+		
+		checkedEnrollment.setStatus(newStatus);
+		enrollmentRepo.save(checkedEnrollment);
+			
+		
+		return true;
+	}
+	
 	
 //	----------MOSTRAR TODOS LOS ESTUDIANTES-------------
 
