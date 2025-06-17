@@ -30,15 +30,13 @@ public class StudentServiceImpl implements StudentService {
 	@Override
 	@Transactional
 	public Student registerStudent(Student student) {
-		Student checkedStudent = studentRepo.findByEmail(student.getEmail());
 
-		if (checkedStudent != null) {
-			throw new ServiceException("El estudiante con email " + student.getEmail() + " ya está registrado.");
+		studentRepo.findByEmail(student.getEmail())
+				.ifPresent(s -> {throw new ServiceException("El estudiante con email " + student.getEmail() + " ya está registrado.");});
+		return studentRepo.save(student);
 		}
 
-		studentRepo.save(checkedStudent);
-		return checkedStudent;
-	}
+
 
 //	----------MATRICULAR ESTUDIANTE-------------
 
@@ -46,17 +44,12 @@ public class StudentServiceImpl implements StudentService {
 	@Transactional
 	public Enrollment enrollStudentInGroup(Student student, Group group) {
 
-		Student checkedStudent = studentRepo.findByEmail(student.getEmail());
+		Student checkedStudent = studentRepo.findByEmail(student.getEmail())
+				.orElseThrow(() -> new ServiceException("El estudiante con email " + student.getEmail() + " no existe."));
 
-		if (checkedStudent == null) {
-			throw new ServiceException("El estudiante con email " + student.getEmail() + " no existe.");
-		}
+		Group checkedGroup = groupRepo.findByName(group.getName())
+				.orElseThrow(() -> new ServiceException("El grupo con nombre " + group.getName() + " no existe."));
 
-		Group checkedGroup = groupRepo.findByName(group.getName());
-
-		if (checkedGroup == null) {
-			throw new ServiceException("El grupo con nombre " + group.getName() + " no existe.");
-		}
 
 		Enrollment enrollment = new Enrollment();
 
@@ -81,10 +74,9 @@ public class StudentServiceImpl implements StudentService {
 	@Transactional
 	public void removeStudentEnrollment(Student student, Enrollment enrollment) {
 
-		Student checkedStudent = studentRepo.findByEmail(student.getEmail());
-		if (checkedStudent == null) {
-			throw new ServiceException("El estudiante con email " + student.getEmail() + " no existe.");
-		}
+		Student checkedStudent = studentRepo.findByEmail(student.getEmail())
+				.orElseThrow(() ->new ServiceException("El estudiante con email " + student.getEmail() + " no existe."));
+
 
 		Enrollment checkedEnrollment = enrollmentRepo.findById(enrollment.getId()).orElseThrow(
 				() -> new ServiceException("La matrícula con el id " + enrollment.getId() + " no existe."));
@@ -103,43 +95,27 @@ public class StudentServiceImpl implements StudentService {
 			enrollmentRepo.delete(checkedEnrollment);
 		}
 	}
+	
+	
+//	----------CAMBIAR EL STATUS DE LA  MATRÍCULA-------- DEJA LA MATRÍCULA INHABILITADA PERO CONSERVA SU TRAZA EN DB
+	
 
 	public boolean updateEnrollmentStatus(Long studentId, Long enrollmentId, Enrollment.Status newStatus) {
 
-		
-		Student checkedStudent = studentRepo.findById(studentId).orElseThrow(()-> new ServiceException("El estudiante no existe"));
-		
-		Enrollment checkedEnrollment = enrollmentRepo.findById(enrollmentId).orElseThrow(() -> new ServiceException("La matrícula no existe"));
-		
-		if(!checkedStudent.getStudentEnrollments().contains(checkedEnrollment)) {
+		Student checkedStudent = studentRepo.findById(studentId)
+				.orElseThrow(() -> new ServiceException("El estudiante no existe"));
+
+		Enrollment checkedEnrollment = enrollmentRepo.findById(enrollmentId)
+				.orElseThrow(() -> new ServiceException("La matrícula no existe"));
+
+		if (!checkedStudent.getStudentEnrollments().contains(checkedEnrollment)) {
 			return false;
 		}
 		checkedEnrollment.setStatus(newStatus);
-	    enrollmentRepo.save(checkedEnrollment);
-	    
+		enrollmentRepo.save(checkedEnrollment);
+
 		return true;
 	}
-
-//		Enrollment checkedEnrollment = enrollmentRepo.findById(enrollment.getId()).orElseThrow(() -> new ServiceException("La matrícula no existe"));
-//
-//		Student checkedStudent = checkedEnrollment.getStudent();
-//		if (checkedStudent == null) {
-//			throw new ServiceException("El estudiante no existe");
-//		}
-//		if (!checkedStudent.getStudentEnrollments().contains(checkedEnrollment)) {
-//			throw new ServiceException("El estudiante no tiene una matrícula con id " + enrollment.getId() + ".");
-//		}
-//		Group checkedGroup = enrollment.getGroup();
-//		if (checkedGroup == null) {
-//			throw new ServiceException("El grupo no existe");
-//		}
-//		
-//		if (!checkedGroup.getGroupEnrollments().contains(checkedEnrollment)) {
-//			throw new ServiceException("El grupo no tiene una matrícula con id " + enrollment.getId() + ".");
-//		}
-//		
-//		checkedEnrollment.setStatus(newStatus);
-//		enrollmentRepo.save(checkedEnrollment);
 
 //	----------MOSTRAR TODOS LOS ESTUDIANTES-------------
 
@@ -160,6 +136,33 @@ public class StudentServiceImpl implements StudentService {
 	public Student findById(Long id) {
 		Optional<Student> student = studentRepo.findById(id);
 		return student.orElseThrow(() -> new ServiceException("El estudiante no existe"));
+	}
+
+
+
+	@Override
+	@Transactional
+	public Student updateStudent(Long id, Student updatedStudent) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+
+	@Override
+	@Transactional
+	public void deactivateStudent(Long id) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+
+	@Override
+	@Transactional
+	public List<Enrollment> getStudentEnrollments(Long studentId) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

@@ -11,7 +11,7 @@ public interface StudentRepository extends UserBaseRepository<Student>{
 	
 
 	@EntityGraph(value = "Student.withEnrollments")
-	Student findByEmail(String email);
+	@NonNull Optional<Student> findByEmail(@NonNull String email);
 
 	@EntityGraph(value = "Student.withEnrollments")
 	@NonNull Optional<Student> findById(@NonNull Long id);

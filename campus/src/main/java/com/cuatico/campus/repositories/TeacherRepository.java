@@ -10,7 +10,7 @@ import com.cuatico.campus.entities.Teacher;
 public interface TeacherRepository extends UserBaseRepository<Teacher> {
 	
 	@EntityGraph(value = "Teacher.withGroups")
-	Teacher findByEmail(String email);
+	@NonNull Optional<Teacher> findByEmail(@NonNull String email);
 	
 
 	@EntityGraph(value = "Teacher.withGroups")
