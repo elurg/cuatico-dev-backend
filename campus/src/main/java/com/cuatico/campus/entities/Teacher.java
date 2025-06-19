@@ -34,24 +34,4 @@ public class Teacher extends User {
 	@JsonIgnore
 	private List<Group> teacherGroups = new ArrayList<>();
 
-//	-----------------------------------------------------------------------------------
-//	------------------------MÉTODOS DE LA CLASE----------------------------------------
-//	-----------------------------------------------------------------------------------
-
-//	----------AÑADIR GRUPO AL TEACHER-------------
-
-	public void addGroup(Group group) {
-		if (group != null && this.teacherGroups.add(group) && !group.getGroupTeachers().contains(this)) {
-			group.addTeacher(this);
-		}
-	}
-
-//	----------ELIMINAR GRUPO AL TEACHER------------- 
-
-	public void removeGroup(Group group) {
-		if (group != null && this.teacherGroups.remove(group) && group.getGroupTeachers().contains(this)) {
-			group.removeTeacher(this);
-		}
-	}
-
 }

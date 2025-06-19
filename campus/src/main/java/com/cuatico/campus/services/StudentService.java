@@ -7,6 +7,7 @@ import com.cuatico.campus.entities.Group;
 import com.cuatico.campus.entities.Student;
 
 public interface StudentService {
+	
 	Student registerStudent(Student student);
 	Student updateStudent(Long id, Student updatedStudent);
 	void deactivateStudent(Long id);

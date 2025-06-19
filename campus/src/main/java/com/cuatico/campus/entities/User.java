@@ -20,6 +20,7 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.PositiveOrZero;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -60,7 +61,8 @@ public abstract class User {
 
 //	----------STATUS-------------
 	@Enumerated(EnumType.STRING)
-	private Status status;
+	@Builder.Default
+	private Status status = User.Status.ACTIVE;
 	
 	
 
