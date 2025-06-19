@@ -16,7 +16,7 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class TeacherSerciveImpl implements TeacherService{
+public class TeacherServiceImpl implements TeacherService{
 	private final TeacherRepository teacherRepo;
 	private final GroupRepository groupRepo;
 	
@@ -159,3 +159,28 @@ public class TeacherSerciveImpl implements TeacherService{
         return teachers;
     }
 }
+
+
+
+
+
+
+
+//----------REGISTRAR TEACHER-------------
+//----------ACTUALIZAR TEACHER-------------
+//----------DESACTIVAR TEACHER-------------
+//----------CAMBIAR CONTRASEÑA-------------
+//----------AÑADIR GRUPO AL TEACHER-------------
+//----------ELIMINAR GRUPO AL TEACHER-------------
+//----------MOSTRAR GRUPOS DEL TEACHER-------------
+//----------BUSCAR TEACHER POR ID-------------
+//----------MOSTRAR TODOS LOS TEACHERS-------------
+
+
+
+
+//----------AÑADIR GRUPO AL STAFF-------------
+//----------ELIMINAR GRUPO AL STAFF-------------
+//----------MOSTRAR GRUPOS DEL STAFF-------------
+//----------BUSCAR STAFF POR ID-------------
+//----------MOSTRAR TODOS LOS STAFF-------------

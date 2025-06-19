@@ -1,7 +1,6 @@
 package com.cuatico.campus.repositories;
 
-import java.util.Optional;
-import java.util.Set;
+import java.util.List;
 
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -14,9 +13,9 @@ import com.cuatico.campus.entities.Student;
 public interface EnrollmentRepository extends JpaRepository<Enrollment, Long> {
 	
 	@EntityGraph(value = "Enrollment.withStudentAndGroup")
-    @NonNull Optional<Set<Enrollment>> findByStudent(@NonNull Student student);
+    @NonNull List<Enrollment> findByStudent(@NonNull Student student);
     
     @EntityGraph(value = "Enrollment.withStudentAndGroup")
-    @NonNull Optional<Set<Enrollment>> findByGroup(@NonNull Group group);
+    @NonNull List<Enrollment> findByGroup(@NonNull Group group);
 
 }

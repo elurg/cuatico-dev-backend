@@ -5,9 +5,15 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
-import com.cuatico.campus.entities.*;
-import com.cuatico.campus.repositories.*;
-import com.cuatico.campus.services.*;
+import com.cuatico.campus.entities.Enrollment;
+import com.cuatico.campus.entities.Group;
+import com.cuatico.campus.entities.Student;
+import com.cuatico.campus.entities.User;
+import com.cuatico.campus.repositories.EnrollmentRepository;
+import com.cuatico.campus.repositories.GroupRepository;
+import com.cuatico.campus.repositories.StudentRepository;
+import com.cuatico.campus.services.ServiceException;
+import com.cuatico.campus.services.StudentService;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;

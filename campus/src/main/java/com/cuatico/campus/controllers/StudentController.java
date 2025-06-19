@@ -2,7 +2,7 @@ package com.cuatico.campus.controllers;
 
 import java.util.List;
 
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -12,10 +12,10 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.cuatico.campus.entities.Enrollment;
 import com.cuatico.campus.entities.Student;
-import com.cuatico.campus.services.ServiceException;
 import com.cuatico.campus.services.StudentService;
 
 import jakarta.validation.Valid;
@@ -30,13 +30,12 @@ public class StudentController {
 	private final StudentService studentService;
 
 	@PostMapping("/register")
-	public ResponseEntity<Student> registerStudent(@RequestBody @Valid Student student) {
-		try {
-			Student savedStudent = studentService.registerStudent(student);
-			return ResponseEntity.ok(savedStudent);
-		} catch (ServiceException e) {
-			return ResponseEntity.badRequest().build();
+	public Student registerStudent(@RequestBody @Valid Student student) {
+		Student savedStudent = studentService.registerStudent(student);
+		if(savedStudent == null) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
 		}
+		return savedStudent;
 	}
 
 	@GetMapping("")
@@ -45,42 +44,42 @@ public class StudentController {
 	}
 
 	@GetMapping("{id}")
-	public ResponseEntity<Student> getStudent(@PathVariable Long id) {
-		try {
-			return ResponseEntity.ok(studentService.findById(id));
-		} catch (ServiceException e) {
-			return ResponseEntity.notFound().build();
+	public Student getStudent(@PathVariable Long id) {
+		Student checkedStudent = studentService.findById(id);
+		if(checkedStudent == null) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND);
 		}
+		return checkedStudent;
 
 	}
 
 	@GetMapping("/{id}/enrollments")
-	public ResponseEntity<List<Enrollment>> getStudentEnrollments(@PathVariable Long id) {
-		try {
-			return ResponseEntity.ok(studentService.getStudentEnrollments(id));
-		} catch (ServiceException e) {
-			return ResponseEntity.notFound().build();
+	public List<Enrollment> getStudentEnrollments(@PathVariable Long id) {
+		List<Enrollment> checkedEnrollments = studentService.getStudentEnrollments(id);
+		if(checkedEnrollments == null) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND);
 		}
+		return checkedEnrollments;
+		
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<Student> updateStudent(@PathVariable Long id, @RequestBody @Valid Student student) {
-		try {
-			Student updated = studentService.updateStudent(id, student);
-			return ResponseEntity.ok(updated);
-		} catch (ServiceException e) {
-			return ResponseEntity.badRequest().build();
+	public Student updateStudent(@PathVariable Long id, @RequestBody @Valid Student student) {
+		Student updatedStudent = studentService.updateStudent(id, student);
+		if(updatedStudent == null) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
 		}
+		return updatedStudent;
+		
 	}
 
 	@PatchMapping("/{id}/deactivate")
-	public ResponseEntity<Void> deactivateStudent(@PathVariable Long id) {
-		try {
-			studentService.deactivateStudent(id);
-			return ResponseEntity.ok().build();
-		} catch (ServiceException e) {
-			return ResponseEntity.notFound().build();
+	public void deactivateStudent(@PathVariable Long id) {
+		Student deactivatedStudent = studentService.findById(id);
+		if(deactivatedStudent == null) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND);
 		}
+		studentService.deactivateStudent(id);
 	}
 
 }

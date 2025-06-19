@@ -23,9 +23,9 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @Data
 @Entity
-@DiscriminatorValue("TEACHER")
-@NamedEntityGraph(name = "Teacher.withGroups", attributeNodes = @NamedAttributeNode("teacherGroups"))
-public class Teacher extends User implements Staff{
+@DiscriminatorValue("ADMIN")
+@NamedEntityGraph(name = "Admin.withGroups", attributeNodes = @NamedAttributeNode("teacherGroups"))
+public class Admin extends User implements Staff{
 
 //	----------GRUPOS ASIGNADOS-------------
 

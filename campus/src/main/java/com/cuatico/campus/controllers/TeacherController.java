@@ -2,7 +2,7 @@ package com.cuatico.campus.controllers;
 
 import java.util.List;
 
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.cuatico.campus.entities.Group;
 import com.cuatico.campus.entities.Teacher;
@@ -29,13 +30,12 @@ public class TeacherController {
 	private final TeacherService teacherService;
 
 	@PostMapping("/register")
-	public ResponseEntity<Teacher> registerTeacher(@RequestBody @Valid Teacher teacher) {
-		try {
-			Teacher savedTeacher = teacherService.registerTeacher(teacher);
-			return ResponseEntity.ok(savedTeacher);
-		} catch (ServiceException e) {
-			return ResponseEntity.badRequest().build();
+	public Teacher registerTeacher(@RequestBody @Valid Teacher teacher) {
+		Teacher savedTeacher = teacherService.registerTeacher(teacher);
+		if (savedTeacher == null) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
 		}
+		return savedTeacher;
 	}
 
 	@GetMapping("")
@@ -44,60 +44,58 @@ public class TeacherController {
 	}
 
 	@GetMapping("{id}")
-	public ResponseEntity<Teacher> getTeacher(@PathVariable Long id) {
-		try {
-			return ResponseEntity.ok(teacherService.findById(id));
-		} catch (ServiceException e) {
-			return ResponseEntity.notFound().build();
+	public Teacher getTeacher(@PathVariable Long id) {
+		Teacher checkedTeacher = teacherService.findById(id);
+		if (checkedTeacher == null) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND);
 		}
+		return checkedTeacher;
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<Teacher> updateTeacher(@PathVariable Long id, @RequestBody @Valid Teacher teacher) {
-		try {
-			Teacher updated = teacherService.updateTeacher(id, teacher);
-			return ResponseEntity.ok(updated);
-		} catch (ServiceException e) {
-			return ResponseEntity.badRequest().build();
+	public Teacher updateTeacher(@PathVariable Long id, @RequestBody @Valid Teacher teacher) {
+		Teacher updatedTeacher = teacherService.updateTeacher(id, teacher);
+		if (updatedTeacher == null) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
 		}
+		return updatedTeacher;
+
 	}
 
 	@PatchMapping("/{id}/deactivate")
-	public ResponseEntity<Void> deactivateTeacher(@PathVariable Long id) {
-		try {
-			teacherService.deactivateTeacher(id);
-			return ResponseEntity.ok().build();
-		} catch (ServiceException e) {
-			return ResponseEntity.notFound().build();
+	public void deactivateTeacher(@PathVariable Long id) {
+		Teacher deactivatedTeacher = teacherService.findById(id);
+		if (deactivatedTeacher == null) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND);
 		}
+		teacherService.deactivateTeacher(id);
+
 	}
 
 	@GetMapping("/{id}/groups")
-	public ResponseEntity<List<Group>> getTeacherGroups(@PathVariable Long id) {
-		try {
-			return ResponseEntity.ok(teacherService.getTeacherGroups(id));
-		} catch (ServiceException e) {
-			return ResponseEntity.notFound().build();
+	public List<Group> getTeacherGroups(@PathVariable Long id) {
+		List <Group> teacherGroups = teacherService.getTeacherGroups(id);
+		if (teacherGroups == null) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND);
 		}
+		return teacherGroups;
 	}
 
 	@PatchMapping("/{id}/groups/{groupId}/add")
-	public ResponseEntity<Void> addGroupToTeacher(@PathVariable Long id, @PathVariable Long groupId) {
-		try {
-			teacherService.addGroupToTeacher(id, groupId);
-			return ResponseEntity.ok().build();
-		} catch (ServiceException e) {
-			return ResponseEntity.badRequest().build();
-		}
+	public void addGroupToTeacher(@PathVariable Long id, @PathVariable Long groupId) {
+	    try {
+	        teacherService.addGroupToTeacher(id, groupId);
+	    } catch (ServiceException e) {
+	        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No se pudo agregar el grupo al profesor", e);
+	    }
 	}
 
 	@PatchMapping("/{id}/groups/{groupId}/remove")
-	public ResponseEntity<Void> removeGroupFromTeacher(@PathVariable Long id, @PathVariable Long groupId) {
+	public void removeGroupFromTeacher(@PathVariable Long id, @PathVariable Long groupId) {
 		try {
-			teacherService.removeGroupFromTeacher(id, groupId);
-			return ResponseEntity.ok().build();
-		} catch (ServiceException e) {
-			return ResponseEntity.badRequest().build();
-		}
+	        teacherService.removeGroupFromTeacher(id, groupId);
+	    } catch (ServiceException e) {
+	        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No se pudo eliminar el grupo al profesor", e);
+	    }
 	}
 }
