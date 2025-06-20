@@ -10,10 +10,10 @@ import com.cuatico.campus.entities.Group;
 
 public interface GroupRepository extends JpaRepository<Group, Long> {
 	
-	@EntityGraph(attributePaths = {"Group.withTeachers", "Group.withEnrollments"})
+	@EntityGraph(attributePaths = {"Group.withStaff", "Group.withEnrollments"})
 	@NonNull Optional<Group> findByName(@NonNull String name);
 
-	@EntityGraph(value = "Group.withTeachers")
+	@EntityGraph(value = "Group.withStaff")
 	@NonNull Optional<Group> findById(@NonNull Long id);
 	
 //	@EntityGraph(value = "Group.withEnrollments")

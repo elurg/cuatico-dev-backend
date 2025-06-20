@@ -9,11 +9,11 @@ import com.cuatico.campus.entities.Admin;
 
 public interface AdminRepository extends UserBaseRepository<Admin> {
 	
-	@EntityGraph(value = "Teacher.withGroups")
+	@EntityGraph(value = "Admin.withGroups")
 	@NonNull Optional<Admin> findByEmail(@NonNull String email);
 	
 
-	@EntityGraph(value = "Teacher.withGroups")
+	@EntityGraph(value = "Admin.withGroups")
 	@NonNull Optional<Admin> findById(@NonNull Long id);
 	
 
