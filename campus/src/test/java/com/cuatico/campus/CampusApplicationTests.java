@@ -11,6 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import com.cuatico.campus.entities.Enrollment;
 import com.cuatico.campus.entities.Group;
+import com.cuatico.campus.entities.Staff;
 import com.cuatico.campus.entities.Student;
 import com.cuatico.campus.entities.Teacher;
 import com.cuatico.campus.entities.User.Status;
@@ -51,7 +52,7 @@ class CampusApplicationTests {
 		List<Group> grupos = new ArrayList<>();
 		grupos.add(grupo1);
 		grupos.add(grupo2);
-		teacher.setTeacherGroups(grupos);
+		teacher.setGroups(grupos);
 		
 		
 //		INSERTAR EL TEACHER
@@ -60,13 +61,13 @@ class CampusApplicationTests {
 		
 		
 //		GENERAR UN SET DE TEACHERS (como los cursos pueden tener más de un profe, hay que pasarlos en una colección aunque solo sea uno)
-		List<Teacher> teachers = new ArrayList<>();
+		List<Staff> teachers = new ArrayList<>();
 		teachers.add(teacher);
 
 		
 //		ASIGNAR EL TEACHER A LOS GRUPOS
-		grupo1.setGroupTeachers(teachers);
-		grupo2.setGroupTeachers(teachers);
+		grupo1.setGroupStaff(teachers);
+		grupo2.setGroupStaff(teachers);
 		
 //		ACTUALIZAR LOS GRUPOS CON LA INFO DEL TEACHER
 		

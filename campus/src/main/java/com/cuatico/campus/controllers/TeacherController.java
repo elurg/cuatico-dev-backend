@@ -27,6 +27,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @CrossOrigin(origins = "*")
 public class TeacherController {
+	
 	private final TeacherService teacherService;
 
 	@PostMapping("/register")
@@ -44,7 +45,7 @@ public class TeacherController {
 	}
 
 	@GetMapping("{id}")
-	public Teacher getTeacher(@PathVariable Long id) {
+	public Teacher findTeacherById(@PathVariable Long id) {
 		Teacher checkedTeacher = teacherService.findById(id);
 		if (checkedTeacher == null) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND);

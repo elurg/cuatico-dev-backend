@@ -96,11 +96,11 @@ public class TeacherServiceImpl implements TeacherService{
         Group checkedGroup = groupRepo.findById(groupId)
             .orElseThrow(() -> new ServiceException("El grupo no existe"));
 
-        if (!chechedTeacher.getTeacherGroups().contains(checkedGroup)) {
-        	chechedTeacher.getTeacherGroups().add(checkedGroup);
+        if (!chechedTeacher.getGroups().contains(checkedGroup)) {
+        	chechedTeacher.getGroups().add(checkedGroup);
         }
-        if (!checkedGroup.getGroupTeachers().contains(chechedTeacher)) {
-        	checkedGroup.getGroupTeachers().add(chechedTeacher);
+        if (!checkedGroup.getGroupStaff().contains(chechedTeacher)) {
+        	checkedGroup.getGroupStaff().add(chechedTeacher);
         }
         teacherRepo.save(chechedTeacher);
         groupRepo.save(checkedGroup);
@@ -117,8 +117,8 @@ public class TeacherServiceImpl implements TeacherService{
         Group checkedGroup = groupRepo.findById(groupId)
             .orElseThrow(() -> new ServiceException("El grupo no existe"));
 
-        checkedTeacher.getTeacherGroups().remove(checkedGroup);
-        checkedGroup.getGroupTeachers().remove(checkedTeacher);
+        checkedTeacher.getGroups().remove(checkedGroup);
+        checkedGroup.getGroupStaff().remove(checkedTeacher);
 
         teacherRepo.save(checkedTeacher);
         groupRepo.save(checkedGroup);
@@ -133,7 +133,7 @@ public class TeacherServiceImpl implements TeacherService{
     public List<Group> getTeacherGroups(Long teacherId) {
         Teacher teacher = teacherRepo.findById(teacherId)
             .orElseThrow(() -> new ServiceException("El profesor no existe"));
-        return teacher.getTeacherGroups();
+        return teacher.getGroups();
     }
 	
 	
@@ -159,28 +159,3 @@ public class TeacherServiceImpl implements TeacherService{
         return teachers;
     }
 }
-
-
-
-
-
-
-
-//----------REGISTRAR TEACHER-------------
-//----------ACTUALIZAR TEACHER-------------
-//----------DESACTIVAR TEACHER-------------
-//----------CAMBIAR CONTRASEÑA-------------
-//----------AÑADIR GRUPO AL TEACHER-------------
-//----------ELIMINAR GRUPO AL TEACHER-------------
-//----------MOSTRAR GRUPOS DEL TEACHER-------------
-//----------BUSCAR TEACHER POR ID-------------
-//----------MOSTRAR TODOS LOS TEACHERS-------------
-
-
-
-
-//----------AÑADIR GRUPO AL STAFF-------------
-//----------ELIMINAR GRUPO AL STAFF-------------
-//----------MOSTRAR GRUPOS DEL STAFF-------------
-//----------BUSCAR STAFF POR ID-------------
-//----------MOSTRAR TODOS LOS STAFF-------------

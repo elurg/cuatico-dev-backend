@@ -10,7 +10,7 @@ public interface TeacherService {
 	Teacher registerTeacher(Teacher teacher);
     Teacher updateTeacher(Long id, Teacher updatedTeacher);
     void deactivateTeacher(Long id);
-	public void changePassword(Long studentId, String oldPassword, String newPassword);
+	public void changePassword(Long teacherId, String oldPassword, String newPassword);
 
     void addGroupToTeacher(Long teacherId, Long groupId);
     void removeGroupFromTeacher(Long teacherId, Long groupId);

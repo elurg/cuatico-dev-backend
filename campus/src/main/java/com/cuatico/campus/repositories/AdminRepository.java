@@ -15,8 +15,4 @@ public interface AdminRepository extends UserBaseRepository<Admin> {
 
 	@EntityGraph(value = "Admin.withGroups")
 	@NonNull Optional<Admin> findById(@NonNull Long id);
-	
-
-//	@EntityGraph(value = "Teacher.withGroups")
-//	Teacher findByGroup(Set<Group> groups);
 }

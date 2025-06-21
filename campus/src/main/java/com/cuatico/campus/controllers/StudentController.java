@@ -44,7 +44,7 @@ public class StudentController {
 	}
 
 	@GetMapping("{id}")
-	public Student getStudent(@PathVariable Long id) {
+	public Student findStudentById(@PathVariable Long id) {
 		Student checkedStudent = studentService.findById(id);
 		if(checkedStudent == null) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND);
