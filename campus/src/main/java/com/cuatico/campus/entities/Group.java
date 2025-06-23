@@ -91,8 +91,7 @@ public class Group {
 	private Integer inactiveEnrolled;
 
 	// ----------LISTA DE MATRICULADOS-------------
-	@OneToMany
-	@JoinTable(name = "group_enrollments", joinColumns = @JoinColumn(name = "group_id"), inverseJoinColumns = @JoinColumn(name = "enrollment_id"))
+	@OneToMany(mappedBy = "group")
 	@Builder.Default
 	@JsonIgnore
 	private List<Enrollment> groupEnrollments = new ArrayList<>();
