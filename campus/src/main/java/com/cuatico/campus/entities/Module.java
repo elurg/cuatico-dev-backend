@@ -1,6 +1,7 @@
 package com.cuatico.campus.entities;
 
-import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -11,6 +12,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.NamedAttributeNode;
 import jakarta.persistence.NamedEntityGraph;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -18,57 +20,45 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-
-@AllArgsConstructor
-@NoArgsConstructor
-@Builder
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@NamedEntityGraph(name = "Module.withResources", attributeNodes = @NamedAttributeNode("resources"))
 @Entity
-@Table(name="enrollments")
-@NamedEntityGraph(name = "Enrollment.withStudentAndGroup", attributeNodes = {
-												@NamedAttributeNode("student"),
-												@NamedAttributeNode("group")})
-public class Enrollment {
-	
+@Table(name = "modules")
+public class Module {
+
 	public enum Status {
-	    ACTIVE, INACTIVE, SUSPENDED
+		ACTIVE, INACTIVE, HIDDEN
 	}
-	
-	
-//	----------ID-------------
+
+//	----------ID-------------	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
-	
+
 //	----------STATUS-------------
-	@NotNull
 	@Enumerated(EnumType.STRING)
 	@Builder.Default
-	private Status status = Status.ACTIVE;
-	
-	
-//	----------FECHAS-------------
+	private Status status = Module.Status.ACTIVE;
+
+//	----------TÍTULO-------------
 	@NotNull
-	@Builder.Default
-	private LocalDateTime enrollmentDate = LocalDateTime.now();
-	
-	private LocalDateTime endDate;
-	
-	
-//	----------ESTUDIANTE-------------
-	@NotNull
-	@ManyToOne
-	private Student student;
-	
-	
-//	----------GRUPO-------------	
-	@NotNull
-	@ManyToOne
+	private String title;
+
+//	----------DESCRIPCIÓN-------------
+	private String description;
+
+//	----------POSICIÓN-------------
+	private Integer position;
+
+//	----------GRUPO-------------
+	@ManyToOne(optional = false)
 	private Group group;
-	
-	
-//	----------NOTA-------------
-	private Integer finalGrade;
-	private Boolean hasPassed;
+
+//	----------LISTA DE MÓDULOS-------------
+	@OneToMany(mappedBy = "module")
+	@Builder.Default
+	private List<Resource> resources = new ArrayList<>();
 }

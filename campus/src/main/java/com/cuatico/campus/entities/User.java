@@ -46,10 +46,6 @@ public abstract class User {
 	    ACTIVE, INACTIVE, SUSPENDED
 	}
 	
-	public enum Roles {
-	    ADMIN, TEACHER, STUDENT
-	}
-	
 	
 //	----------ID-------------
 	@Id
