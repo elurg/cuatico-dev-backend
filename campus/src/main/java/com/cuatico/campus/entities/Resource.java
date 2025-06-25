@@ -32,8 +32,8 @@ public abstract class Resource {
     private String description;
 
     @ManyToOne(optional = false)
-    @JoinColumn(name = "module_id")
-    private Module module;
+    @JoinColumn(name = "section_id")
+    private Section section;
     
     public String getType() {
         return this.getClass().getSimpleName();

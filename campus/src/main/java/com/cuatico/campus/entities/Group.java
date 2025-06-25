@@ -35,7 +35,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "groups")
 @NamedEntityGraph(name = "Group.withStaff", attributeNodes = @NamedAttributeNode("groupStaff"))
 @NamedEntityGraph(name = "Group.withEnrollments", attributeNodes = @NamedAttributeNode("groupEnrollments"))
-@NamedEntityGraph(name = "Group.withModules", attributeNodes = @NamedAttributeNode("modules"))
+@NamedEntityGraph(name = "Group.withSections", attributeNodes = @NamedAttributeNode("sections"))
 public class Group {
 
 	public enum Status {
@@ -101,5 +101,5 @@ public class Group {
 	@OneToMany(mappedBy = "group")
 	@Builder.Default
 	@JsonIgnore
-	private List<Module> modules = new ArrayList<>();
+	private List<Section> sections = new ArrayList<>();
 }

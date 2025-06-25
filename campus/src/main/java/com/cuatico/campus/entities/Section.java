@@ -24,10 +24,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@NamedEntityGraph(name = "Module.withResources", attributeNodes = @NamedAttributeNode("resources"))
+@NamedEntityGraph(name = "Section.withResources", attributeNodes = @NamedAttributeNode("resources"))
 @Entity
-@Table(name = "modules")
-public class Module {
+@Table(name = "sections")
+public class Section {
 
 	public enum Status {
 		ACTIVE, INACTIVE, HIDDEN
@@ -41,7 +41,7 @@ public class Module {
 //	----------STATUS-------------
 	@Enumerated(EnumType.STRING)
 	@Builder.Default
-	private Status status = Module.Status.ACTIVE;
+	private Status status = Section.Status.ACTIVE;
 
 //	----------TÍTULO-------------
 	@NotNull
@@ -58,7 +58,7 @@ public class Module {
 	private Group group;
 
 //	----------LISTA DE MÓDULOS-------------
-	@OneToMany(mappedBy = "module")
+	@OneToMany(mappedBy = "section")
 	@Builder.Default
 	private List<Resource> resources = new ArrayList<>();
 }
