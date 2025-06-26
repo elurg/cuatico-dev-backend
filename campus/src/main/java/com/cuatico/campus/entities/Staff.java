@@ -3,7 +3,7 @@ package com.cuatico.campus.entities;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.persistence.DiscriminatorValue;
@@ -28,6 +28,6 @@ public abstract class Staff extends User {
 
     @ManyToMany(mappedBy = "groupStaff")
     @Builder.Default
-    @JsonIgnore
+    @JsonBackReference
     private List<Group> groups = new ArrayList<>();
 }

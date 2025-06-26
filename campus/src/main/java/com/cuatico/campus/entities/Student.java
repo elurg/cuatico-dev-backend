@@ -23,7 +23,7 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @Data
 @Entity
-@DiscriminatorValue("Student")
+@DiscriminatorValue("STUDENT")
 @NamedEntityGraph(name = "Student.withEnrollments", attributeNodes = @NamedAttributeNode("studentEnrollments"))
 public class Student extends User {
 

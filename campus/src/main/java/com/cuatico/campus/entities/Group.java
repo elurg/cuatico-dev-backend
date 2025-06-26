@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -33,9 +34,8 @@ import lombok.NoArgsConstructor;
 @Entity
 @Data
 @Table(name = "groups")
-@NamedEntityGraph(name = "Group.withStaff", attributeNodes = @NamedAttributeNode("groupStaff"))
-@NamedEntityGraph(name = "Group.withEnrollments", attributeNodes = @NamedAttributeNode("groupEnrollments"))
-@NamedEntityGraph(name = "Group.withSections", attributeNodes = @NamedAttributeNode("sections"))
+@NamedEntityGraph(name = "Group.withAll", attributeNodes = 
+	{@NamedAttributeNode("groupStaff"), @NamedAttributeNode("groupEnrollments"), @NamedAttributeNode("sections"), @NamedAttributeNode("course")})
 public class Group {
 
 	public enum Status {
@@ -81,7 +81,7 @@ public class Group {
 	@ManyToMany
 	@JoinTable(name = "group_staff", joinColumns = @JoinColumn(name = "group_id"), inverseJoinColumns = @JoinColumn(name = "staff_id"))
 	@Builder.Default
-	@JsonIgnore
+	@JsonManagedReference
 	private List<Staff> groupStaff = new ArrayList<>();
 
 	// ----------ESTUDIANTES MÁXIMOS-------------

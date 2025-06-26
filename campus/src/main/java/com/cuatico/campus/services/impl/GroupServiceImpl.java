@@ -17,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 public class GroupServiceImpl implements GroupService {
 
 	private final GroupRepository groupRepo;
+//	private final StaffRepository staffRepo;
 
 //  ----------------GESTIÓN DE GRUPO----------------
 
@@ -65,7 +66,9 @@ public class GroupServiceImpl implements GroupService {
 	@Override
 	@Transactional
 	public Group findById(Long groupId) {
-		return groupRepo.findById(groupId).orElseThrow(() -> new ServiceException("El grupo no existe"));
+		var grupo = groupRepo.findById(groupId).orElseThrow(() -> new ServiceException("El grupo no existe"));
+		// grupo.setGroupStaff(staffRepo.findByGroupsId(groupId));
+		return grupo;
 	}
 
 	@Override
