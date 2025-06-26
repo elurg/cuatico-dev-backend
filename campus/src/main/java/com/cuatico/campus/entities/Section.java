@@ -9,6 +9,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.NamedAttributeNode;
 import jakarta.persistence.NamedEntityGraph;
@@ -54,7 +55,8 @@ public class Section {
 	private Integer position;
 
 //	----------GRUPO-------------
-	@ManyToOne(optional = false)
+	@ManyToOne
+	@JoinColumn(name = "group_id")
 	private Group group;
 
 //	----------LISTA DE MÓDULOS-------------

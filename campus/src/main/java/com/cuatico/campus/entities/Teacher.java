@@ -14,7 +14,7 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @Data
 @Entity
-@DiscriminatorValue("TEACHER")
+@DiscriminatorValue("Teacher")
 @NamedEntityGraph(name = "Teacher.withGroups", attributeNodes = @NamedAttributeNode("groups"))
 public class Teacher extends Staff {
 

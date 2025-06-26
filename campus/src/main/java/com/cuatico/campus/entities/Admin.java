@@ -14,7 +14,7 @@ import lombok.experimental.SuperBuilder;
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @Entity
-@DiscriminatorValue("ADMIN")
+@DiscriminatorValue("Admin")
 @NamedEntityGraph(name = "Admin.withGroups", attributeNodes = @NamedAttributeNode("groups"))
 public class Admin extends Staff {
     

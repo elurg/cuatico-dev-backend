@@ -31,7 +31,6 @@ public class GroupController {
 
     private final GroupService groupService;
 
-    // CRUD básico
     @PostMapping("")
     public Group createGroup(@RequestBody @Valid Group group) {
         return groupService.createGroup(group);
