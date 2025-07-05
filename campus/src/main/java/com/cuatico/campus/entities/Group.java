@@ -4,7 +4,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.Entity;
@@ -94,12 +93,12 @@ public class Group {
 	// ----------LISTA DE MATRICULADOS-------------
 	@OneToMany(mappedBy = "group")
 	@Builder.Default
-	@JsonIgnore
+	@JsonManagedReference
 	private List<Enrollment> groupEnrollments = new ArrayList<>();
 
 	// ----------LISTA DE MÓDULOS-------------
 	@OneToMany(mappedBy = "group")
 	@Builder.Default
-	@JsonIgnore
+	@JsonManagedReference
 	private List<Section> sections = new ArrayList<>();
 }

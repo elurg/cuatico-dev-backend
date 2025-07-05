@@ -2,6 +2,8 @@ package com.cuatico.campus.entities;
 
 import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -65,6 +67,7 @@ public class Enrollment {
 //	----------GRUPO-------------	
 	@NotNull
 	@ManyToOne
+	@JsonBackReference
 	private Group group;
 	
 	
