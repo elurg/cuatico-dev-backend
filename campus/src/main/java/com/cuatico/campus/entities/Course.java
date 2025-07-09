@@ -39,7 +39,7 @@ public class Course {
 	
 	@NotBlank
 	@Size(max = 30)
-	private String name;
+	private String title;
 	
 	@Size(min = 50, max = 2000)
 	private String description;

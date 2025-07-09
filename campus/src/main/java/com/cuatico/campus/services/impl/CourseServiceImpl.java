@@ -41,7 +41,7 @@ public class CourseServiceImpl implements CourseService {
     public Course updateCourse(Long id, Course updatedCourse) {
         Course existing = courseRepo.findById(id)
         		.orElseThrow(() -> new ServiceException("El curso no existe"));
-        existing.setName(updatedCourse.getName());
+        existing.setTitle(updatedCourse.getTitle());
         existing.setDescription(updatedCourse.getDescription());
         existing.setPrice(updatedCourse.getPrice());
         return courseRepo.save(existing);

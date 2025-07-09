@@ -27,7 +27,7 @@ import lombok.NoArgsConstructor;
 @Data
 @Entity
 @Table(name="enrollments")
-@NamedEntityGraph(name = "Enrollment.withStudentAndGroup", attributeNodes = {
+@NamedEntityGraph(name = "Enrollment.withAll", attributeNodes = {
 												@NamedAttributeNode("student"),
 												@NamedAttributeNode("group")})
 public class Enrollment {
@@ -72,6 +72,6 @@ public class Enrollment {
 	
 	
 //	----------NOTA-------------
-	private Integer finalGrade;
+	private Double finalGrade;
 	private Boolean hasPassed;
 }

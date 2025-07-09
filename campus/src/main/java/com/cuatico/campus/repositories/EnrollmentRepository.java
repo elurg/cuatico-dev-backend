@@ -12,10 +12,10 @@ import com.cuatico.campus.entities.Student;
 
 public interface EnrollmentRepository extends JpaRepository<Enrollment, Long> {
 	
-	@EntityGraph(value = "Enrollment.withStudentAndGroup")
+	@EntityGraph(value = "Enrollment.withAll")
     @NonNull List<Enrollment> findByStudent(@NonNull Student student);
     
-    @EntityGraph(value = "Enrollment.withStudentAndGroup")
+    @EntityGraph(value = "Enrollment.withAll")
     @NonNull List<Enrollment> findByGroup(@NonNull Group group);
 
 }

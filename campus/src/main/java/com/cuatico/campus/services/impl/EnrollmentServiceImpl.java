@@ -1,9 +1,15 @@
 package com.cuatico.campus.services.impl;
 
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.UUID;
+
 import org.springframework.stereotype.Service;
 
+import com.cuatico.campus.entities.Certificate;
 import com.cuatico.campus.entities.Enrollment;
 import com.cuatico.campus.entities.Group;
+import com.cuatico.campus.repositories.CertificateRepository;
 import com.cuatico.campus.repositories.EnrollmentRepository;
 import com.cuatico.campus.repositories.GroupRepository;
 import com.cuatico.campus.services.EnrollmentService;
@@ -18,6 +24,7 @@ public class EnrollmentServiceImpl implements EnrollmentService {
 
 	private final GroupRepository groupRepo;
 	private final EnrollmentRepository enrollmentRepo;
+	private final CertificateRepository certificateRepo;
 
 //  ----------------GESTIÓN DE MATRÍCULAS----------------    
 	@Override
@@ -78,4 +85,40 @@ public class EnrollmentServiceImpl implements EnrollmentService {
 		enrollmentRepo.save(checkedEnrollment);
 		return true;
 	}
+	
+	@Override
+	@Transactional
+	public Certificate generateCertificate(Long enrollmentId) {
+	    Enrollment enrollment = enrollmentRepo.findById(enrollmentId)
+	        .orElseThrow(() -> new ServiceException("La matrícula no existe"));
+
+	    if (certificateRepo.existsByEnrollment(enrollment)) {
+	        throw new ServiceException("Ya existe un certificado para esta matrícula");
+	    }
+
+	    String generatedCode = "CERT-" + UUID.randomUUID().toString().substring(0, 8).toUpperCase();
+
+	    Certificate certificate = Certificate.builder()
+	        .enrollment(enrollment)
+	        .certificateCode(generatedCode)
+	        .certificationDate(LocalDateTime.now())
+	        .build();
+
+	    return certificateRepo.save(certificate);
+	}
+	
+	@Override
+	@Transactional
+	public List<Enrollment> findAll() {
+	    return enrollmentRepo.findAll();
+	}
+
+	@Override
+	@Transactional
+	public Enrollment findById(Long enrollmentId) {
+	    return enrollmentRepo.findById(enrollmentId)
+	            .orElseThrow(() -> new ServiceException("La matrícula no existe"));
+	}
+
+
 }

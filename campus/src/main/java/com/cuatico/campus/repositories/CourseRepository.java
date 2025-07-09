@@ -11,7 +11,7 @@ import com.cuatico.campus.entities.Course;
 public interface CourseRepository extends JpaRepository<Course, Long>{
 	
 	@EntityGraph(attributePaths = "groups")
-	@NonNull Optional<Course> findByName(@NonNull String name);
+	@NonNull Optional<Course> findByTitle(@NonNull String name);
 
 	@EntityGraph(value = "groups")
 	@NonNull Optional<Course> findById(@NonNull Long id);
